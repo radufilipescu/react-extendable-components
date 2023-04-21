@@ -1,10 +1,10 @@
-import { ReactElement, useCallback, useMemo, useState, useRef, useEffect } from "react";
-import { XTab } from "./XTab";
+import { useCallback, useMemo, useState, useRef, useEffect, ReactNode } from "react";
 import { XTabsContext, IXTabsContext, TEnumValue } from "./XTabsContext";
 
 export interface IXTabsProps<T extends TEnumValue> {
   readonly default: T;
-  readonly children: ReactElement<typeof XTab>[];
+  readonly children: ReactNode;
+  readonly beforeTabLabel?: ReactNode | ((value: TEnumValue, isSelected: boolean) => ReactNode);
 }
 
 const SYM = Symbol();
@@ -16,7 +16,7 @@ export function XTabs<T extends TEnumValue>(props: IXTabsProps<T>) {
   useEffect(() => {
     setSelected(props.default);
   }, []);
-  const xContext = useMemo<IXTabsContext>(() => ({ selected, onChecked, placeholder: tabContentRef }), [selected]);
+  const xContext = useMemo<IXTabsContext>(() => ({ selected, onChecked, placeholder: tabContentRef, beforeTabLabel: props.beforeTabLabel }), [selected]);
   return (
     <XTabsContext.Provider value={xContext}>
       <div>
