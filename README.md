@@ -1,1 +1,1 @@
-react-comp-lib-template
+React Extendable Components
