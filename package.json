@@ -1,0 +1,42 @@
+{
+  "name": "react-comp-lib-template",
+  "version": "0.1.0",
+  "type": "module",
+  "module": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build",
+    "build": "tsup"
+  },
+  "dependencies": { },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@vitejs/plugin-react": "^3.1.0",
+    "tsup": "^6.7.0",
+    "typescript": "^4.9.3",
+    "vite": "^4.2.0"
+  },
+  "description": "This is a React components library template",
+  "author": "Radu Filipescu",
+  "license": "MIT",
+  "homepage": "https://github.com/radufilipescu/react-comp-lib-template",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/radufilipescu/react-comp-lib-template.git"
+  },
+  "bugs": {
+    "url": "https://github.com/radufilipescu/react-comp-lib-template/issues"
+  },
+  "keywords": ["tsup", "typescript", "react", "components", "library", "template", "vite"]
+}
