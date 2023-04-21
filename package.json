@@ -1,5 +1,5 @@
 {
-  "name": "react-comp-lib-template",
+  "name": "react-extendable-components",
   "version": "0.1.0",
   "type": "module",
   "module": "./dist/index.js",
@@ -30,13 +30,13 @@
   "description": "This is a React components library template",
   "author": "Radu Filipescu",
   "license": "MIT",
-  "homepage": "https://github.com/radufilipescu/react-comp-lib-template",
+  "homepage": "https://github.com/radufilipescu/react-extendable-components",
   "repository": {
     "type": "git",
-    "url": "https://github.com/radufilipescu/react-comp-lib-template.git"
+    "url": "https://github.com/radufilipescu/react-extendable-components.git"
   },
   "bugs": {
-    "url": "https://github.com/radufilipescu/react-comp-lib-template/issues"
+    "url": "https://github.com/radufilipescu/react-extendable-components/issues"
   },
-  "keywords": ["tsup", "typescript", "react", "components", "library", "template", "vite"]
+  "keywords": ["tsup", "typescript", "react", "library", "extendable", "components", "extendable components"]
 }
