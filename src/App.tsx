@@ -15,6 +15,22 @@ enum Ord {
 function App() {
   return (
     <div className="App">
+      <XTabs<Ord> default={Ord.First}>
+        <XTab value={Ord.First}>
+          <ButtonCounter label={Ord.First} />
+        </XTab>
+        &nbsp;|&nbsp;
+        <XTab value={Ord.Second}>
+          <ButtonCounter label={Ord.Second} />
+        </XTab>
+        &nbsp;|&nbsp;
+        <XTab value={Ord.Third}>
+          <ButtonCounter label={Ord.Third} />
+        </XTab>
+      </XTabs>
+      <br />
+      <hr />
+      <br />
       <XTabs<Ord> default={Ord.First} beforeTabLabel={(_, isSelected) => <>
         <input type='radio' checked={isSelected} readOnly style={{ cursor: 'inherit' }}/>&nbsp;
       </>}>
