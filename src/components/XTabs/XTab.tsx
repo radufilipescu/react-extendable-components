@@ -1,14 +1,14 @@
 import { ReactNode, useCallback, useContext } from "react";
 import { createPortal } from "react-dom";
-import { XTabsContext, TEnumValue } from "./XTabsContext";
+import { XTabsContext } from "./XTabsContext";
 
-export interface IXTabProps {
-  readonly value: TEnumValue;
+export interface IXTabProps<T> {
+  readonly value: T;
   readonly children: ReactNode;
-  readonly render?: ReactNode | ((value: TEnumValue, isSelected: boolean) => ReactNode);
+  readonly render?: ReactNode | ((value: T, isSelected: boolean) => ReactNode);
 }
 
-export function XTab(props: IXTabProps) {
+export function XTab<T>(props: IXTabProps<T>) {
   const ctx = useContext(XTabsContext);
 
   const divClickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
