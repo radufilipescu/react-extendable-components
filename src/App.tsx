@@ -1,5 +1,5 @@
 import './App.css'
-import { XTabs, IXTabsProps, IXTabsDefaultProps } from './components/XTabs/XTabs'
+import { XTabs, IXTabsProps, IXTabsDefaultProps, ContentPlaceholder } from './components/XTabs/XTabs'
 import { XTab } from './components/XTabs/XTab'
 import { ButtonCounter } from './components'
 
@@ -16,14 +16,14 @@ XTabs.defaultProps = {
 }
 
 const XOrderedTabs = XTabs<Ordered>;
-// XOrderedTabs.defaultProps = {
-//   beforeTabLabel: (val, isSelected) => <span>{isSelected ? '✌' : '✊'}</span>,
-// } as IXTabsDefaultProps<Ordered>;
+XOrderedTabs.defaultProps = {
+  beforeTabLabel: (val, isSelected) => <span>{isSelected ? '✌' : '✊'}</span>,
+} as IXTabsDefaultProps<Ordered>;
 
 const XOrderedTab = XTab<Ordered>;
 
 const OrderedTabs = function() {
-  return <XOrderedTabs default={Ordered.First} beforeTabLabel={(_, isSelected) => <>
+  return <XOrderedTabs contentPlaceholder={ContentPlaceholder.BeforeTabs} default={Ordered.First} beforeTabLabel={(_, isSelected) => <>
     <input type='radio' checked={isSelected} readOnly style={{ cursor: 'inherit' }}/>&nbsp;
   </>}>
     <XOrderedTab value={Ordered.First}>
