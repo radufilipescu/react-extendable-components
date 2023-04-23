@@ -24,7 +24,7 @@ const CARD_STYLE: CSSProperties = {
   border: '1px solid #ccc',
 };
 
-function OrderedTabContent(props: { value: Ordered }) {
+function TabContent(props: { value: Ordered }) {
   return <div style={CARD_STYLE}>
     <p>Current value: {props.value}</p>
   </div>
@@ -34,13 +34,13 @@ export function EnumBasedTabs(){
   return (
     <XTabs<Ordered> default={Ordered.First}>
       <XTab<Ordered> value={Ordered.First}>
-        <OrderedTabContent value={Ordered.First} />
+        <TabContent value={Ordered.First} />
       </XTab>
       <XTab<Ordered> value={Ordered.Second}>
-        <OrderedTabContent value={Ordered.Second} />
+        <TabContent value={Ordered.Second} />
       </XTab>
       <XTab<Ordered> value={Ordered.Third}>
-        <OrderedTabContent value={Ordered.Third} />
+        <TabContent value={Ordered.Third} />
       </XTab>
     </XTabs>
   )

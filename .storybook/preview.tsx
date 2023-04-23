@@ -37,7 +37,7 @@ const preview: Preview = {
       };
 
       XTabs.defaultProps = {
-        beforeTabLabel(val, isSelected) {
+        beforeTabLabel: (val, isSelected) => {
           return (
             <input type='radio' style={TAB_RADIO_STYLE} checked={isSelected} readOnly />
           )
@@ -52,14 +52,14 @@ const preview: Preview = {
       };
       
       XTab.defaultProps = {
-        tabComp({ children, style, ...rest }: { children: React.ReactNode, style?: CSSProperties }) {
+        tabComp: ({ children, style, ...rest }: { children: React.ReactNode, style?: CSSProperties }) => {
           return (
             <div {...rest} style={{...style, ...TAB_CONTAINER_STYLE}}>
               {children}
             </div>
           )
         },
-        render(value, isSelected) {
+        render: (value, isSelected) => {
           return (
             <TabLabel value={value} isSelected={isSelected} />
           )
