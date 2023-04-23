@@ -1,7 +1,8 @@
 import './App.css'
-import { XTabs, IXTabsProps, IXTabsDefaultProps, ContentPlaceholder } from './components/XTabs/XTabs'
+import { XTabs, IXTabsProps, IXTabsDefaultProps, ContentPlaceholder, generateXTabs } from './components/XTabs/XTabs'
 import { XTab } from './components/XTabs/XTab'
 import { ButtonCounter } from './components'
+import { useState } from 'react'
 
 enum Ordered {
   First = 'First',
@@ -159,8 +160,91 @@ function App() {
       <hr/>
       <br />
       <OrderedTabs />
+      <br />
+      <hr />
+      {"6. <UserTabs />"}
+      <hr/>
+      <br />
+      <UserTabs />
+      <br />
+      <hr />
+      {"6. <GenUserTabs />"}
+      <hr/>
+      <br />
+      <GenUserTabs />
     </div>
   )
+}
+
+type TUserModel = {
+  readonly id: number;
+  readonly name: string;
+  readonly surname: string;
+  readonly age: number;
+  readonly email: string;
+};
+
+const XUserTabs = XTabs<TUserModel>;
+const XUserTab = XTab<TUserModel>;
+
+function UserTabs() {
+  const [user, setUser] = useState<TUserModel>(() => ({
+    id: 1,
+    name: 'John',
+    surname: 'Doe',
+    age: 30,
+    email: 'johndoe@mail.com',
+  }));
+
+  return (
+    <XUserTabs default="name">
+      <XUserTab value='name'>
+        <div className="card">
+          <ButtonCounter label={user.name} />
+        </div>
+      </XUserTab>
+      &nbsp;|&nbsp;
+      <XUserTab value="surname">
+        <div className="card">
+          <ButtonCounter label={user.surname} />
+        </div>
+      </XUserTab>
+      &nbsp;|&nbsp;
+      <XUserTab value="age">
+        <div className="card">
+          <ButtonCounter label={user.age.toString()} />
+        </div>
+      </XUserTab>
+      &nbsp;|&nbsp;
+      <XUserTab value="email">
+        <div className="card">
+          <ButtonCounter label={user.email} />
+        </div>
+      </XUserTab>
+    </XUserTabs>
+  )
+}
+
+function GenUserTabs() {
+  const [user, setUser] = useState<TUserModel>(() => ({
+    id: 1,
+    name: 'John',
+    surname: 'Doe',
+    age: 30,
+    email: 'johndoe@mail.com',
+  }));
+
+  const [_id, ...userProps] = Object.entries(user);
+  const tabs = generateXTabs(
+    userProps,
+    (propName, propValue, isSelected) => (
+      <div className="card">
+        <ButtonCounter label={propValue} />
+      </div>
+    ),
+  );
+
+  return tabs;
 }
 
 export default App

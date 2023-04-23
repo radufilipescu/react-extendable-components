@@ -3,9 +3,9 @@ import { createPortal } from "react-dom";
 import { XTabsContext } from "./XTabsContext";
 
 export interface IXTabProps<T> {
-  readonly value: T;
+  readonly value: T extends object ? keyof T : T ;
   readonly children: ReactNode;
-  readonly render?: ReactNode | ((value: T, isSelected: boolean) => ReactNode);
+  readonly render?: ReactNode | ((value: T extends object ? keyof T : T, isSelected: boolean) => ReactNode);
 }
 
 export function XTab<T>(props: IXTabProps<T>) {
