@@ -1,11 +1,12 @@
 import { ReactNode, useCallback, useContext } from "react";
 import { createPortal } from "react-dom";
 import { XTabsContext } from "./XTabsContext";
+import { TPropKey } from "./types";
 
 export interface IXTabProps<T> {
-  readonly value: T extends object ? keyof T : T ;
-  readonly children: ReactNode | ((value: T extends object ? keyof T : T, isSelected: boolean) => ReactNode);
-  readonly render?: ReactNode | ((value: T extends object ? keyof T : T, isSelected: boolean) => ReactNode);
+  readonly value: TPropKey<T>;
+  readonly children: ReactNode | ((value: TPropKey<T>, isSelected: boolean) => ReactNode);
+  readonly render?: ReactNode | ((value: TPropKey<T>, isSelected: boolean) => ReactNode);
 }
 
 export function XTab<T>(props: IXTabProps<T>) {

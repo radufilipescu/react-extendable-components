@@ -1,8 +1,13 @@
 import './App.css'
-import { XTabs, IXTabsProps, IXTabsDefaultProps, ContentPlaceholder, GenTabs } from './components/XTabs/XTabs'
-import { XTab } from './components/XTabs/XTab'
 import { ButtonCounter } from './components'
 import { useState } from 'react'
+import { 
+  TabsContentPlaceholder,
+  XTabs, IXTabsDefaultProps, 
+  GenTabs,
+  XTab 
+} from './components/XTabs'
+import { useObjectEntries } from './components/XTabs/hooks'
 
 enum Ordered {
   First = 'First',
@@ -24,7 +29,7 @@ XOrderedTabs.defaultProps = {
 const XOrderedTab = XTab<Ordered>;
 
 const OrderedTabs = function() {
-  return <XOrderedTabs contentPlaceholder={ContentPlaceholder.BeforeTabs} default={Ordered.First} beforeTabLabel={(_, isSelected) => <>
+  return <XOrderedTabs contentPlaceholder={TabsContentPlaceholder.BeforeTabs} default={Ordered.First} beforeTabLabel={(_, isSelected) => <>
     <input type='radio' checked={isSelected} readOnly style={{ cursor: 'inherit' }}/>&nbsp;
   </>}>
     <XOrderedTab value={Ordered.First}>
@@ -237,17 +242,19 @@ function GenUserTabs() {
     email: 'johndoe@mail.com',
   }));
 
-  const [_id, ...userProps] = Object.entries(user);
+  const [_id, ...userProps] = useObjectEntries(user);
+
   return (
-    <GenTabs<TUserModel>
+    <GenTabs tabsComp={XUserTabs}
       default="name"
-      entries={userProps as any}
-      render={([propName, propValue], isSelected) => [
-        <span style={{ marginRight: '20px' }}>{propName}</span>,
-        <div className="card">
-          <ButtonCounter label={propValue.toString()} />
-        </div>
-      ]}
+      entries={userProps}
+      render={(propName, propValue) => (
+        <XUserTab value={propName}>
+          <div className="card">
+            <ButtonCounter label={propValue.toString()} />
+          </div>
+        </XUserTab>
+      )}
     />
   );
 }

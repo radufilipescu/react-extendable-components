@@ -1,17 +1,17 @@
 import { useCallback, useMemo, useState, useRef, useEffect, ReactNode } from "react";
 import { XTabsContext, IXTabsContext } from "./XTabsContext";
-import { XTab } from "./XTab";
+import { TPropEntry, TPropKey, TPropValue } from "./types";
 
-export enum ContentPlaceholder {
+export enum TabsContentPlaceholder {
   BeforeTabs = 'before-tabs',
   AfterTabs = 'after-tabs',
 }
 
 export interface IXTabsProps<T> {
-  readonly default: T extends object ? keyof T : T ;
+  readonly default: TPropKey<T> ;
   readonly children: ReactNode;
-  readonly beforeTabLabel?: ReactNode | ((value: T extends object ? keyof T : T, isSelected: boolean) => ReactNode);
-  readonly contentPlaceholder?: ContentPlaceholder;
+  readonly beforeTabLabel?: ReactNode | ((value: TPropKey<T>, isSelected: boolean) => ReactNode);
+  readonly contentPlaceholder?: TabsContentPlaceholder;
 }
 
 export type IXTabsDefaultProps<T> = Partial<
@@ -21,8 +21,8 @@ export type IXTabsDefaultProps<T> = Partial<
 const SYM = Symbol();
 
 export function XTabs<T>(props: IXTabsProps<T>) {
-  const [selected, setSelected] = useState<T extends object ? keyof T : T>(SYM as any);
-  const onChecked = useCallback<(val: T extends object ? keyof T : T) => void>((val) => setSelected(val), [setSelected]);
+  const [selected, setSelected] = useState<TPropKey<T>>(SYM as any);
+  const onChecked = useCallback<(val: TPropKey<T>) => void>((val) => setSelected(val), [setSelected]);
   const tabContentRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
@@ -36,16 +36,16 @@ export function XTabs<T>(props: IXTabsProps<T>) {
     beforeTabLabel: props.beforeTabLabel 
   }), [selected]);
 
-  const contentPos = props.contentPlaceholder ?? ContentPlaceholder.AfterTabs;
+  const contentPos = props.contentPlaceholder ?? TabsContentPlaceholder.AfterTabs;
 
   return (
     <XTabsContext.Provider value={xContext as any}>
       <div>
-        {contentPos === ContentPlaceholder.BeforeTabs && <div ref={tabContentRef} />}
+        {contentPos === TabsContentPlaceholder.BeforeTabs && <div ref={tabContentRef} />}
         <div>
           {props.children}
         </div>
-        {contentPos === ContentPlaceholder.AfterTabs && <div ref={tabContentRef} />}
+        {contentPos === TabsContentPlaceholder.AfterTabs && <div ref={tabContentRef} />}
       </div>
     </XTabsContext.Provider>
   );
@@ -53,36 +53,16 @@ export function XTabs<T>(props: IXTabsProps<T>) {
 
 XTabs.defaultProps = ({ } as IXTabsDefaultProps<any>);
 
-type TPropEntry<T> = [
-  T extends object ? keyof T : T,
-  T extends object ? T[keyof T] : T
-];
-
 export interface IGenTabsProps<T> {
+  readonly tabsComp?: React.ComponentType<IXTabsProps<T>>;
   readonly entries: TPropEntry<T>[];
-  readonly default: T extends object ? keyof T : T;
-  readonly render: (prop: TPropEntry<T>, isSelected: boolean) => [ReactNode, ReactNode];
+  readonly default: TPropKey<T>;
+  readonly render: (propKey: TPropKey<T>, propValue: TPropValue<T>) => ReactNode;
 }
 
-type TRenderXTabPart<T> = (value: T extends object ? keyof T : T, isSelected: boolean) => ReactNode;
-
 export function GenTabs<T>(props: IGenTabsProps<T>) {
-  const result: [TRenderXTabPart<T>, TRenderXTabPart<T>][] = props.entries.map((entry) => {
-    return [
-      (value, isSelected) => {
-        return props.render(entry, isSelected)[0];
-      },
-      (value, isSelected) => {
-        return props.render(entry, isSelected)[1];
-      }
-    ]
-  });
-
-  return <XTabs<T> default={props.default}>
-    {result.map(([renderLabel, renderContent], ndx) => {
-      return <XTab<T> key={ndx} value={props.entries[ndx][0]} render={renderLabel}>
-        {renderContent}
-      </XTab>
-    })}
-  </XTabs>;
+  const Tabs = props.tabsComp ?? XTabs<T>;
+  return <Tabs default={props.default}>
+    {props.entries.map(entry => props.render(entry[0], entry[1]))}
+  </Tabs>;
 }
