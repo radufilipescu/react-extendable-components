@@ -1,12 +1,21 @@
-import { ReactNode, useCallback, useContext } from "react";
+import React, { ReactNode, useCallback, useContext } from "react";
 import { createPortal } from "react-dom";
 import { XTabsContext } from "./XTabsContext";
 import { TPropKey } from "./types";
 
 export interface IXTabProps<T> {
+  readonly tabComp?: React.ComponentType<any>;
   readonly value: TPropKey<T>;
   readonly children: ReactNode | ((value: TPropKey<T>, isSelected: boolean) => ReactNode);
   readonly render?: ReactNode | ((value: TPropKey<T>, isSelected: boolean) => ReactNode);
+}
+
+export type IXTabDefaultProps<T> = Partial<
+  Omit<IXTabProps<T>, "default" | "children">
+>;
+
+function Div({ children, ...rest}: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
+  return <div {...rest}>{children}</div>;
 }
 
 export function XTab<T>(props: IXTabProps<T>) {
@@ -22,8 +31,10 @@ export function XTab<T>(props: IXTabProps<T>) {
     ? props.children(props.value, isSelected)
     : props.children;
 
+  const TabComp = props.tabComp ?? Div;
+
   return <>
-    <div style={{ display: 'inline-block', cursor: 'pointer' }} onClick={divClickHandler}>
+    <TabComp style={{ display: 'inline-block', cursor: 'pointer' }} onClick={divClickHandler}>
       {ctx.beforeTabLabel 
         ? typeof ctx.beforeTabLabel === 'function'
           ? ctx.beforeTabLabel(props.value, isSelected)
@@ -34,7 +45,9 @@ export function XTab<T>(props: IXTabProps<T>) {
           ? props.render(props.value, isSelected)
           : props.render
         : props.value?.toString() ?? ''}
-    </div>
+    </TabComp>
     {ctx.placeholder.current && isSelected && createPortal(children, ctx.placeholder.current)}
   </>;
 }
+
+XTab.defaultProps = ({ } as IXTabDefaultProps<any>);
