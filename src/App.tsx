@@ -1,5 +1,5 @@
 import './App.css'
-import { XTabs, IXTabsProps, IXTabsDefaultProps, ContentPlaceholder, generateXTabs } from './components/XTabs/XTabs'
+import { XTabs, IXTabsProps, IXTabsDefaultProps, ContentPlaceholder, GenTabs } from './components/XTabs/XTabs'
 import { XTab } from './components/XTabs/XTab'
 import { ButtonCounter } from './components'
 import { useState } from 'react'
@@ -186,6 +186,9 @@ type TUserModel = {
 
 const XUserTabs = XTabs<TUserModel>;
 const XUserTab = XTab<TUserModel>;
+// XUserTabs.defaultProps = {
+//   beforeTabLabel: () => 'asd'
+// } as IXTabsDefaultProps<TUserModel>;
 
 function UserTabs() {
   const [user, setUser] = useState<TUserModel>(() => ({
@@ -235,16 +238,18 @@ function GenUserTabs() {
   }));
 
   const [_id, ...userProps] = Object.entries(user);
-  const tabs = generateXTabs(
-    userProps,
-    (propName, propValue, isSelected) => (
-      <div className="card">
-        <ButtonCounter label={propValue} />
-      </div>
-    ),
+  return (
+    <GenTabs<TUserModel>
+      default="name"
+      entries={userProps as any}
+      render={([propName, propValue], isSelected) => [
+        <span style={{ marginRight: '20px' }}>{propName}</span>,
+        <div className="card">
+          <ButtonCounter label={propValue.toString()} />
+        </div>
+      ]}
+    />
   );
-
-  return tabs;
 }
 
 export default App

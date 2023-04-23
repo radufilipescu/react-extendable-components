@@ -4,7 +4,7 @@ import { XTabsContext } from "./XTabsContext";
 
 export interface IXTabProps<T> {
   readonly value: T extends object ? keyof T : T ;
-  readonly children: ReactNode;
+  readonly children: ReactNode | ((value: T extends object ? keyof T : T, isSelected: boolean) => ReactNode);
   readonly render?: ReactNode | ((value: T extends object ? keyof T : T, isSelected: boolean) => ReactNode);
 }
 
@@ -16,6 +16,10 @@ export function XTab<T>(props: IXTabProps<T>) {
   }, [props.value]);
 
   const isSelected = ctx.selected === props.value;
+
+  const children = typeof props.children === 'function'
+    ? props.children(props.value, isSelected)
+    : props.children;
 
   return <>
     <div style={{ display: 'inline-block', cursor: 'pointer' }} onClick={divClickHandler}>
@@ -30,6 +34,6 @@ export function XTab<T>(props: IXTabProps<T>) {
           : props.render
         : props.value?.toString() ?? ''}
     </div>
-    {ctx.placeholder.current && isSelected && createPortal(props.children, ctx.placeholder.current)}
+    {ctx.placeholder.current && isSelected && createPortal(children, ctx.placeholder.current)}
   </>;
 }

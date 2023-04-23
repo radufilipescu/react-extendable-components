@@ -53,18 +53,36 @@ export function XTabs<T>(props: IXTabsProps<T>) {
 
 XTabs.defaultProps = ({ } as IXTabsDefaultProps<any>);
 
-export function generateXTabs(
-  props: [string, any][],
-  render: ((propName: string, value: any, isSelected: boolean) => ReactNode)
-) {
-  const finalRender = useCallback<((value: string, isSelected: boolean) => ReactNode)>((value, isSelected) => {
-    const prop = props.find(([name]) => name === value) ?? ['??', '??'];
-    console.log('prop', prop);
-    return render(prop[0], prop[1], isSelected);
-  }, [props]);
-  return (
-    <XTabs<string> default={props[0][0]}>
-      {props.map(([name, value], ndx) => finalRender(name, value))}
-    </XTabs>
-  );
+type TPropEntry<T> = [
+  T extends object ? keyof T : T,
+  T extends object ? T[keyof T] : T
+];
+
+export interface IGenTabsProps<T> {
+  readonly entries: TPropEntry<T>[];
+  readonly default: T extends object ? keyof T : T;
+  readonly render: (prop: TPropEntry<T>, isSelected: boolean) => [ReactNode, ReactNode];
+}
+
+type TRenderXTabPart<T> = (value: T extends object ? keyof T : T, isSelected: boolean) => ReactNode;
+
+export function GenTabs<T>(props: IGenTabsProps<T>) {
+  const result: [TRenderXTabPart<T>, TRenderXTabPart<T>][] = props.entries.map((entry) => {
+    return [
+      (value, isSelected) => {
+        return props.render(entry, isSelected)[0];
+      },
+      (value, isSelected) => {
+        return props.render(entry, isSelected)[1];
+      }
+    ]
+  });
+
+  return <XTabs<T> default={props.default}>
+    {result.map(([renderLabel, renderContent], ndx) => {
+      return <XTab<T> key={ndx} value={props.entries[ndx][0]} render={renderLabel}>
+        {renderContent}
+      </XTab>
+    })}
+  </XTabs>;
 }
