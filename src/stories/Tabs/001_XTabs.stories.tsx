@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { 
-    XTabs, XTab, TabsContentPlaceholder, GenTabs, 
-    IXTabsProps, IXTabsDefaultProps 
+  newXTabs, XTabs, newXTab, XTab, TabsContentPlaceholder, GenTabs, 
+  IXTabsProps, IXTabsDefaultProps 
 } from '../../components';
 import { CSSProperties } from 'react';
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction
 const meta = {
   title: 'Get Started/XTabs',
-} satisfies Meta<typeof XTabs>;
+} satisfies Meta<XTabs<any>>;
 
 export default meta;
 
@@ -30,18 +30,21 @@ function TabContent(props: { value: Ordered }) {
   </div>
 }
 
-export function EnumBasedTabs(){ 
+export function EnumBasedTabs(args: any, ctx: any) {
+  const OrderedXTabs = newXTabs<Ordered>(ctx.tabsDefaultProps);
+  const OrderedXTab = newXTab<Ordered>(ctx.tabDefaultProps);
+
   return (
-    <XTabs<Ordered> default={Ordered.First}>
-      <XTab<Ordered> value={Ordered.First}>
+    <OrderedXTabs default={Ordered.First}>
+      <OrderedXTab value={Ordered.First}>
         <TabContent value={Ordered.First} />
-      </XTab>
-      <XTab<Ordered> value={Ordered.Second}>
+      </OrderedXTab>
+      <OrderedXTab value={Ordered.Second}>
         <TabContent value={Ordered.Second} />
-      </XTab>
-      <XTab<Ordered> value={Ordered.Third}>
+      </OrderedXTab>
+      <OrderedXTab value={Ordered.Third}>
         <TabContent value={Ordered.Third} />
-      </XTab>
-    </XTabs>
+      </OrderedXTab>
+    </OrderedXTabs>
   )
 };

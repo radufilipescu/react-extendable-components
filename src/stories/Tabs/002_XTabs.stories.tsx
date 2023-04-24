@@ -1,28 +1,39 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { 
-  XTabs, XTab, TabsContentPlaceholder, GenTabs, 
-  IXTabsProps, IXTabsDefaultProps 
+  newXTabs, newXTab, 
+  TabsContentPlaceholder, GenTabs, 
+  IXTabsProps, IXTabsDefaultProps, XTabs 
 } from '../../components';
-
-const XOrderedTabs = XTabs<Ordered>;
-const XOrderedTab = XTab<Ordered>;
+import { CSSProperties } from 'react';
 
 const meta = {
   title: 'Get Started/XTabs',
   decorators: [
-    function(Story) {
-      
-      XOrderedTabs.defaultProps = {
-        beforeTabLabel: (val, isSelected) => (
-          <span style={{ margin: '5px'}}>{isSelected ? '✌' : '✊'}</span>
-        ),
-      } satisfies IXTabsDefaultProps<Ordered>;
+    function(Story, ctx) {
+      const orderedTabsDefaultProps: IXTabsDefaultProps<Ordered> = { ...ctx.tabsDefaultProps };
+      orderedTabsDefaultProps.beforeTabLabel = (_, isSelected) => (
+        <span style={{ margin: '5px'}}>{isSelected ? '✌' : '✊'}</span>
+      );
 
-      return <Story />
+      const orderedTabDefaultProps: IXTabsDefaultProps<Ordered> = { ...ctx.tabDefaultProps };
+
+      const orderedTabsDefaultProps2: IXTabsDefaultProps<Ordered> = { ...ctx.tabsDefaultProps };
+      orderedTabsDefaultProps2.beforeTabLabel = (_, isSelected) => (
+        <span style={{ margin: '5px'}}>{isSelected ? '✅' : '❌'}</span>
+      );
+
+      return (
+        <Story 
+          orderedTabsDefaultProps={orderedTabsDefaultProps}
+          orderedTabDefaultProps={orderedTabDefaultProps}
+
+          orderedTabsDefaultProps2={orderedTabsDefaultProps2}
+        />
+      )
     }
   ]
-} satisfies Meta<typeof XOrderedTabs>;
+} satisfies Meta<XTabs<any>>;
 
 export default meta;
 
@@ -32,22 +43,46 @@ enum Ordered {
 	Third = 'Third',
 }
 
+const CARD_STYLE: CSSProperties = {
+  padding: '2em',
+  border: '1px solid #ccc',
+};
+
 function TabContent(props: { value: Ordered }) {
-  return <div style={{ padding: '2em' }}>
+  return <div style={CARD_STYLE}>
     <p>Current value: {props.value}</p>
   </div>
 }
 
-export const TypedEnumBasedTabs = () => (
-  <XOrderedTabs default={Ordered.First}>
-    <XOrderedTab value={Ordered.First}>
-      <TabContent value={Ordered.First} />
-    </XOrderedTab>
-    <XOrderedTab value={Ordered.Second}>
-      <TabContent value={Ordered.Second} />
-    </XOrderedTab>
-    <XOrderedTab value={Ordered.Third}>
-      <TabContent value={Ordered.Third} />
-    </XOrderedTab>
-  </XOrderedTabs>
-);
+export const TypedEnumBasedTabs = (args: any, ctx: any) => {
+  const OrderedTabs = newXTabs<Ordered>(ctx.orderedTabsDefaultProps);
+  const OrderedTab = newXTab<Ordered>(ctx.orderedTabDefaultProps);
+
+  const OrderedTabs2 = newXTabs<Ordered>(ctx.orderedTabsDefaultProps2);
+
+  return <>
+    <OrderedTabs default={Ordered.First}>
+      <OrderedTab value={Ordered.First}>
+        <TabContent value={Ordered.First} />
+      </OrderedTab>
+      <OrderedTab value={Ordered.Second}>
+        <TabContent value={Ordered.Second} />
+      </OrderedTab>
+      <OrderedTab value={Ordered.Third}>
+        <TabContent value={Ordered.Third} />
+      </OrderedTab>
+    </OrderedTabs>
+    <hr />
+    <OrderedTabs2 default={Ordered.First}>
+      <OrderedTab value={Ordered.First}>
+        <TabContent value={Ordered.First} />
+      </OrderedTab>
+      <OrderedTab value={Ordered.Second}>
+        <TabContent value={Ordered.Second} />
+      </OrderedTab>
+      <OrderedTab value={Ordered.Third}>
+        <TabContent value={Ordered.Third} />
+      </OrderedTab>
+    </OrderedTabs2>
+  </>
+};

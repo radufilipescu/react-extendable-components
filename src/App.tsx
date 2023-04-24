@@ -1,12 +1,7 @@
 import './App.css'
-import { ButtonCounter } from './components'
+import { ButtonCounter, GenTabs, IXTabsDefaultProps, TabsContentPlaceholder, XTab, XTabs } from './components'
 import { useState } from 'react'
-import { 
-  TabsContentPlaceholder,
-  XTabs, IXTabsDefaultProps, 
-  GenTabs,
-  XTab 
-} from './components/XTabs'
+
 import { useObjectEntries } from './components/XTabs/hooks'
 
 enum Ordered {
@@ -248,7 +243,7 @@ function GenUserTabs() {
     <GenTabs tabsComp={XUserTabs}
       default="name"
       entries={userProps}
-      render={(propName, propValue) => (
+      render={(propName: keyof TUserModel, propValue: number | string) => (
         <XUserTab value={propName}>
           <div className="card">
             <ButtonCounter label={propValue.toString()} />

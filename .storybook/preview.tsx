@@ -1,7 +1,8 @@
 import React, { CSSProperties } from "react";
 import type { Preview } from "@storybook/react";
 
-import { XTabs, XTab } from "../src/components";
+import { newXTabs, newXTab, IXTabsDefaultProps } from "../src/components";
+import { IXTabDefaultProps } from "../src/components/XTabs";
 
 const preview: Preview = {
   parameters: {
@@ -36,7 +37,7 @@ const preview: Preview = {
         )
       };
 
-      XTabs.defaultProps = {
+      const tabsDefaultProps: IXTabsDefaultProps<unknown> = {
         beforeTabLabel: (val, isSelected) => {
           return (
             <input type='radio' style={TAB_RADIO_STYLE} checked={isSelected} readOnly />
@@ -51,7 +52,7 @@ const preview: Preview = {
         margin: '0.5em',
       };
       
-      XTab.defaultProps = {
+      const tabDefaultProps: IXTabDefaultProps<unknown> = {
         tabComp: ({ children, style, ...rest }: { children: React.ReactNode, style?: CSSProperties }) => {
           return (
             <div {...rest} style={{...style, ...TAB_CONTAINER_STYLE}}>
@@ -66,7 +67,12 @@ const preview: Preview = {
         },
       };
 
-      return <Story />;
+      return (
+        <Story 
+          tabsDefaultProps={tabsDefaultProps}
+          tabDefaultProps={tabDefaultProps}
+        />
+      );
     }
   ]
 };

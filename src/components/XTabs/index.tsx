@@ -1,14 +1,24 @@
 export type { 
+  XTabs,
   IXTabsProps,
   IXTabsDefaultProps, 
 } from './XTabs';
 
 export { 
-  XTabs, 
-  GenTabs,
+  newXTabs,
   TabsContentPlaceholder
 } from './XTabs';
 
 export {
-  XTab
+  GenTabs
+} from './GenTabs';
+
+export {
+  newXTab
+} from './XTab';
+
+export type { 
+  XTab,
+  IXTabProps,
+  IXTabDefaultProps, 
 } from './XTab';
