@@ -1,5 +1,5 @@
 import './App.css'
-import { ButtonCounter, GenTabs, IXTabsDefaultProps, TabsContentPlaceholder, XTab, XTabs } from './components'
+import { ButtonCounter, GenTabs, IXTabsDefaultProps, TabsContentPlaceholder, XTab, newXTab, XTabs, newXTabs } from './components'
 import { useState } from 'react'
 
 import { useObjectEntries } from './components/XTabs/hooks'
@@ -10,46 +10,49 @@ enum Ordered {
   Third = 'Third',
 }
 
-XTabs.defaultProps = {
-  beforeTabLabel(value, isSelected) {
+// const XTabs = newXTabs<Ordered>();
+// const XTab = newXTab<Ordered>();
+
+const tabsDefaultProps: IXTabsDefaultProps<unknown> = {
+  beforeTabLabel(_, isSelected) {
     return <span>{isSelected ? '✅' : '❌'}</span>;
   },
 }
 
-const XOrderedTabs = XTabs<Ordered>;
-XOrderedTabs.defaultProps = {
-  beforeTabLabel: (val, isSelected) => <span>{isSelected ? '✌' : '✊'}</span>,
-} as IXTabsDefaultProps<Ordered>;
+// const XOrderedTabs = XTabs<Ordered>;
+// XOrderedTabs.defaultProps = {
+//   beforeTabLabel: (val, isSelected) => <span>{isSelected ? '✌' : '✊'}</span>,
+// } as IXTabsDefaultProps<Ordered>;
 
-const XOrderedTab = XTab<Ordered>;
+// const XOrderedTab = XTab<Ordered>;
 
-const OrderedTabs = function() {
-  return <XOrderedTabs contentPlaceholder={TabsContentPlaceholder.BeforeTabs} default={Ordered.First} beforeTabLabel={(_, isSelected) => <>
-    <input type='radio' checked={isSelected} readOnly style={{ cursor: 'inherit' }}/>&nbsp;
-  </>}>
-    <XOrderedTab value={Ordered.First}>
-      <div className="card">
-        <ButtonCounter label={Ordered.First} />
-      </div>
-    </XOrderedTab>
-    &nbsp;|&nbsp;
-    <XOrderedTab value={Ordered.Second} render={
-      <span style={{ color: 'red' }}>{Ordered.Second}</span>
-    }>
-      <div className="card">
-        <ButtonCounter label={Ordered.Second} />
-      </div>
-    </XOrderedTab>
-    &nbsp;|&nbsp;
-    <XOrderedTab value={Ordered.Third} render={(val, isSelected) => <>
-      <span style={{ background: isSelected ? 'green' : 'red' }}>{val.toString()}</span>
-    </>}>
-      <div className="card">
-        <ButtonCounter label={Ordered.Third} />
-      </div>
-    </XOrderedTab>
-  </XOrderedTabs>
-}
+// const OrderedTabs = function() {
+//   return <XOrderedTabs contentPlaceholder={TabsContentPlaceholder.BeforeTabs} default={Ordered.First} beforeTabLabel={(_, isSelected) => <>
+//     <input type='radio' checked={isSelected} readOnly style={{ cursor: 'inherit' }}/>&nbsp;
+//   </>}>
+//     <XOrderedTab value={Ordered.First}>
+//       <div className="card">
+//         <ButtonCounter label={Ordered.First} />
+//       </div>
+//     </XOrderedTab>
+//     &nbsp;|&nbsp;
+//     <XOrderedTab value={Ordered.Second} render={
+//       <span style={{ color: 'red' }}>{Ordered.Second}</span>
+//     }>
+//       <div className="card">
+//         <ButtonCounter label={Ordered.Second} />
+//       </div>
+//     </XOrderedTab>
+//     &nbsp;|&nbsp;
+//     <XOrderedTab value={Ordered.Third} render={(val, isSelected) => <>
+//       <span style={{ background: isSelected ? 'green' : 'red' }}>{val.toString()}</span>
+//     </>}>
+//       <div className="card">
+//         <ButtonCounter label={Ordered.Third} />
+//       </div>
+//     </XOrderedTab>
+//   </XOrderedTabs>
+// }
 
 function App() {
   return (
@@ -58,7 +61,7 @@ function App() {
       {"1. <XTabs default='First'>"}
       <hr/>
       <br />
-      <XTabs default='First'>
+      {/* <XTabs default='First'>
         <XTab value='First'>
           <ButtonCounter label='First' />
         </XTab>
@@ -70,21 +73,16 @@ function App() {
         <XTab value='Third'>
           <ButtonCounter label='Third' />
         </XTab>
-      </XTabs>
+      </XTabs> */}
       <br />
       <hr />
       {"2. <XOrderedTabs default={Ordered.First}>"}
       <hr/>
       <br />
-      <XOrderedTabs default={Ordered.First}>
+      {/* <XOrderedTabs default={Ordered.First}>
         <XOrderedTab value={Ordered.First}>
           <ButtonCounter label={Ordered.First} />
         </XOrderedTab>
-        {/* &nbsp;|&nbsp; */}
-        {/* Type '"I-AM-NOT-RESTRICTED"' is not assignable to type 'Ordered'. */}
-        {/* <OrdTab value="I-AM-NOT-RESTRICTED">
-          <ButtonCounter label={Ord.Second} />
-        </OrdTab> */}
         &nbsp;|&nbsp;
         <XOrderedTab value={Ordered.Second}>
           <ButtonCounter label={Ordered.Second} />
@@ -93,13 +91,13 @@ function App() {
         <XOrderedTab value={Ordered.Third}>
           <ButtonCounter label={Ordered.Third} />
         </XOrderedTab>
-      </XOrderedTabs>
+      </XOrderedTabs> */}
       <br />
       <hr />
       {"3. <XTabs<Ordered> default={Ordered.First} beforeTabLabel={(_, isSelected) => <> ... </>}>"}
       <hr/>
       <br />
-      <XTabs<Ordered> default={Ordered.First} beforeTabLabel={(_, isSelected) => <>
+      {/* <XTabs<Ordered> default={Ordered.First} beforeTabLabel={(_, isSelected) => <>
         <input type='radio' checked={isSelected} readOnly style={{ cursor: 'inherit' }}/>&nbsp;
       </>}>
         <XTab value={Ordered.First}>
@@ -123,13 +121,13 @@ function App() {
             <ButtonCounter label={Ordered.Third} />
           </div>
         </XTab>
-      </XTabs>
+      </XTabs> */}
       <br />
       <hr />
       {"4. <XOrderedTabs default={Ordered.First} beforeTabLabel={(_, isSelected) => <> ... </>}>"}
       <hr/>
       <br />
-      <XOrderedTabs default={Ordered.First} beforeTabLabel={(_, isSelected) => <>
+      {/* <XOrderedTabs default={Ordered.First} beforeTabLabel={(_, isSelected) => <>
         <input type='radio' checked={isSelected} readOnly style={{ cursor: 'inherit' }}/>&nbsp;
       </>}>
         <XOrderedTab value={Ordered.First}>
@@ -153,13 +151,13 @@ function App() {
             <ButtonCounter label={Ordered.Third} />
           </div>
         </XOrderedTab>
-      </XOrderedTabs>
+      </XOrderedTabs> */}
       <br />
       <hr />
       {"5. <OrderedTabs />"}
       <hr/>
       <br />
-      <OrderedTabs />
+      {/* <OrderedTabs /> */}
       <br />
       <hr />
       {"6. <UserTabs />"}
@@ -184,8 +182,8 @@ type TUserModel = {
   readonly email: string;
 };
 
-const XUserTabs = XTabs<TUserModel>;
-const XUserTab = XTab<TUserModel>;
+const XUserTabs = newXTabs<TUserModel>(tabsDefaultProps);
+const XUserTab = newXTab<TUserModel>();
 // XUserTabs.defaultProps = {
 //   beforeTabLabel: () => 'asd'
 // } as IXTabsDefaultProps<TUserModel>;
